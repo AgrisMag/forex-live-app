@@ -1,8 +1,9 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { API_KEY } from '../constants';
+import { API_KEY } from '../../constants';
+import SelectCurrency from '../select/select.component';
 
-function MyComponent() {
+function Page() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
@@ -29,7 +30,8 @@ function MyComponent() {
     } else {
         return (
             <ul>
-
+                <h1>Forex live wall</h1>
+                <SelectCurrency items={items} />
                 {items.map(item => (
                     <li key={item.ticker}>
                         {item.ticker}{item.bid}{item.changes}
@@ -40,4 +42,4 @@ function MyComponent() {
     }
 }
 
-export default MyComponent;
+export default Page;
