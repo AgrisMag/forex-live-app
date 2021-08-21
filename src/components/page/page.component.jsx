@@ -1,6 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-import { API_KEY } from '../../constants';
+import { useEffect, useState, useFetch } from 'react';
 import SelectCurrency from '../select/select.component';
 
 function Page() {
@@ -10,9 +9,9 @@ function Page() {
     const [selectCurrency, setSelectCurrency] = useState('');
 
     console.log(selectCurrency)
-    const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/EURUSD?apikey=8813ec2a91fb1d6a46c0de9f6bb67635`;
 
-    // ${handleChange.replace('/', '')}
+    const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${selectCurrency}?apikey=8813ec2a91fb1d6a46c0de9f6bb67635`;
+
 
     useEffect(() => {
         fetch(URL_KEY)
@@ -27,8 +26,12 @@ function Page() {
                     setError(error);
                 }
             )
-    }, [])
+    }, [URL_KEY])
 
+
+    const handleChange = e => {
+        setSelectCurrency(e.target.value)
+    }
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -38,7 +41,11 @@ function Page() {
         return (
             <ul>
                 <h1>Forex live wall</h1>
-                <SelectCurrency items={items} />
+                <SelectCurrency key={items.ticker} items={items} onChange={(e) => handleChange(e)} />
+                <div>
+                    <input></input>
+                    <button>Search</button>
+                </div>
                 {items.map(item => (
                     <tr>
                         <td>{item.ticker}</td>
