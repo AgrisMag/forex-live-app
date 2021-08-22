@@ -1,66 +1,59 @@
 import React from 'react';
-import { useEffect, useState, useFetch } from 'react';
-import SelectCurrency from '../select/select.component';
+import { useState } from 'react';
 
 function Page() {
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
-    const [selectCurrency, setSelectCurrency] = useState('');
-
-    console.log(selectCurrency)
-
-    const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${selectCurrency}?apikey=8813ec2a91fb1d6a46c0de9f6bb67635`;
 
 
-    useEffect(() => {
+    const handlechange = e => {
+        let currency = e.target.value;
+        const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${currency}?apikey=8813ec2a91fb1d6a46c0de9f6bb67635`;
         fetch(URL_KEY)
             .then(res => res.json())
             .then(
-                (result) => {
-                    setIsLoaded(true);
-                    setItems(result);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
+                (result) => setItems(result)
             )
-    }, [URL_KEY])
-
-
-    const handleChange = e => {
-        setSelectCurrency(e.target.value)
     }
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-        return <div>Loading...</div>;
-    } else {
-        return (
-            <ul>
-                <h1>Forex live wall</h1>
-                <SelectCurrency key={items.ticker} items={items} onChange={(e) => handleChange(e)} />
-                <div>
-                    <input></input>
-                    <button>Search</button>
-                </div>
-                {items.map(item => (
+    return (
+        <div className="page">
+            <h1>Forex live wall</h1>
+            <form >
+                <label>
+                    Select currency:
+                    <select onChange={handlechange}>
+                        <option value="EURUSD">EURUSD</option>
+                        <option value="USDJPY">USDJPY</option>
+                        <option value="GBPUSD">GBPUSD</option>
+                        <option value="EURGBP">EURGBP</option>
+                    </select>
+                </label>
+            </form>
+            {items.map(item => (
+                <table>
                     <tr>
-                        <td>{item.ticker}</td>
-                        <td>{item.bid}</td>
-                        <td>{item.ask}</td>
-                        <td>{item.open}</td>
-                        <td>{item.low}</td>
-                        <td>{item.high}</td>
-                        <td>{item.changes}</td>
-                        <td>{item.date}</td>
+                        <th>Ticker</th>
+                        <th>Bid</th>
+                        <th>Ask</th>
+                        <th>Open</th>
+                        <th>Low</th>
+                        <th>High</th>
+                        <th>Changes</th>
+                        <th>Date</th>
                     </tr>
-                ))}
-            </ul>
-        );
-    }
+                    <tr>
+                        <td key="1">{item.ticker}</td>
+                        <td key="2">{item.bid}</td>
+                        <td key="3">{item.ask}</td>
+                        <td key="4">{item.open}</td>
+                        <td key="5">{item.low}</td>
+                        <td key="6">{item.high}</td>
+                        <td key="7">{item.changes}</td>
+                        <td key="8">{item.date}</td>
+                    </tr>
+                </table>
+            ))}
+        </div>
+    );
 }
 
 export default Page;
