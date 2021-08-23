@@ -7,28 +7,35 @@ function Page() {
     const [items, setItems] = useState([]);
     const [currency, setCurrency] = useState([]);
 
-    let timer;
-
     useEffect(() => {
         fetch(`https://financialmodelingprep.com/api/v3/fx?apikey=${API_KEY}`)
             .then(res => res.json())
             .then(result => setCurrency(result))
     }, []);
 
-
     const handlechange = e => {
         e.preventDefault();
-        if (timer) {
-            clearInterval(timer)
-        }
         let currency = e.target.value;
         let result = currency.replace('/', '')
         const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${result}?apikey=${API_KEY}`;
-        fetch(URL_KEY)
-            .then(res => res.json())
-            .then(
-                (result) => setItems(result)
-            )
+
+        const fetchData = async () => {
+            try {
+                const res = await fetch(URL_KEY);
+                const json = await res.json();
+                setItems(json);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        const id = setInterval(() => {
+            fetchData();
+        }, 2000);
+
+        fetchData();
+
+        return () => clearInterval(id);
     }
     return (
         <div className="page">
