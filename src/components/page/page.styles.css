@@ -6,6 +6,10 @@
     justify-content: center;
 }
 
+form {
+    margin-bottom: 30px;
+}
+
 td {
     padding: 10px;
     margin: 20px;

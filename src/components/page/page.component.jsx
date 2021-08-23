@@ -7,6 +7,8 @@ function Page() {
     const [items, setItems] = useState([]);
     const [currency, setCurrency] = useState([]);
 
+    let timer;
+
     useEffect(() => {
         fetch(`https://financialmodelingprep.com/api/v3/fx?apikey=${API_KEY}`)
             .then(res => res.json())
@@ -16,6 +18,9 @@ function Page() {
 
     const handlechange = e => {
         e.preventDefault();
+        if (timer) {
+            clearInterval(timer)
+        }
         let currency = e.target.value;
         let result = currency.replace('/', '')
         const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${result}?apikey=${API_KEY}`;
