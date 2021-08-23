@@ -1,13 +1,22 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { API_KEY } from '../../constatnts';
 
 function Page() {
     const [items, setItems] = useState([]);
+    const [currency, setCurrency] = useState([]);
+
+    useEffect(() => {
+        fetch(`https://financialmodelingprep.com/api/v3/fx?apikey=${API_KEY}`)
+            .then(res => res.json())
+            .then(result => setCurrency(result))
+    }, []);
 
 
     const handlechange = e => {
         let currency = e.target.value;
-        const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${currency}?apikey=8813ec2a91fb1d6a46c0de9f6bb67635`;
+        let result = currency.replace('/', '')
+        const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${result}?apikey=${API_KEY}`;
         fetch(URL_KEY)
             .then(res => res.json())
             .then(
@@ -21,35 +30,38 @@ function Page() {
                 <label>
                     Select currency:
                     <select onChange={handlechange}>
-                        <option value="EURUSD">EURUSD</option>
-                        <option value="USDJPY">USDJPY</option>
-                        <option value="GBPUSD">GBPUSD</option>
-                        <option value="EURGBP">EURGBP</option>
+                        {currency.map(item => (
+                            <option key={item.ticker} value={item.ticker}>{item.ticker}</option>
+                        ))}
                     </select>
                 </label>
             </form>
             {items.map(item => (
                 <table>
-                    <tr>
-                        <th>Ticker</th>
-                        <th>Bid</th>
-                        <th>Ask</th>
-                        <th>Open</th>
-                        <th>Low</th>
-                        <th>High</th>
-                        <th>Changes</th>
-                        <th>Date</th>
-                    </tr>
-                    <tr>
-                        <td key="1">{item.ticker}</td>
-                        <td key="2">{item.bid}</td>
-                        <td key="3">{item.ask}</td>
-                        <td key="4">{item.open}</td>
-                        <td key="5">{item.low}</td>
-                        <td key="6">{item.high}</td>
-                        <td key="7">{item.changes}</td>
-                        <td key="8">{item.date}</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Ticker</th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                            <th>Open</th>
+                            <th>Low</th>
+                            <th>High</th>
+                            <th>Changes</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td key="1">{item.ticker}</td>
+                            <td key="2">{item.bid}</td>
+                            <td key="3">{item.ask}</td>
+                            <td key="4">{item.open}</td>
+                            <td key="5">{item.low}</td>
+                            <td key="6">{item.high}</td>
+                            <td key="7">{item.changes}</td>
+                            <td key="8">{item.date}</td>
+                        </tr>
+                    </tbody>
                 </table>
             ))}
         </div>
