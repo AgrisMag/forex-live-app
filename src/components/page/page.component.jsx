@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { API_KEY } from '../../constatnts';
+import './page.styles.css'
 
 function Page() {
     const [items, setItems] = useState([]);
@@ -14,6 +15,7 @@ function Page() {
 
 
     const handlechange = e => {
+        e.preventDefault();
         let currency = e.target.value;
         let result = currency.replace('/', '')
         const URL_KEY = `https://financialmodelingprep.com/api/v3/fx/${result}?apikey=${API_KEY}`;
